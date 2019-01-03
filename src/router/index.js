@@ -8,8 +8,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home',
+      component: () => import('@/views/Home')
+    },
+    {
+      path: '/index',
+      name: 'index',
+      component: () => import('@/views/Index')
     },
     {
       path: '/login',
@@ -20,6 +25,6 @@ export default new Router({
       path: '/index',
       name: 'index',
       component: () => import('@/views/Index')
-    }
+    },
   ]
 })
