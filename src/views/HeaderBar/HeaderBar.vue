@@ -48,7 +48,7 @@
             <li style="color:#fff;" class="fa fa-envelope-o fa-lg"></li>
           </el-badge>
           <el-popover ref="popover-message" placement="bottom-end" trigger="click">
-            <!--<message-panel></message-panel>-->
+            <message-panel></message-panel>
           </el-popover>
         </el-menu-item>
         <el-menu-item index="4" v-popover:popover-notice>
@@ -57,17 +57,16 @@
             <li style="color:#fff;" class="fa fa-bell-o fa-lg"></li>
           </el-badge>
           <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
-            <!--<notice-panel></notice-panel>-->
+            <notice-panel></notice-panel>
           </el-popover>
         </el-menu-item>
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
           <span class="user-info"><img :src="user.avatar"/>{{user.name}}</span>
           <el-popover ref="popover-personal" placement="bottom-end" trigger="click" :visible-arrow="false">
-            <!--<personal-panel :user="user"></personal-panel>-->
+            <personal-panel :user="user"></personal-panel>
           </el-popover>
         </el-menu-item>
-
       </el-menu>
     </span>
 
@@ -78,12 +77,18 @@
   import {mapState} from 'vuex'
   import Hamburger from "@/components/Hamburger"
   import ThemePicker from "@/components/ThemePicker"
+  import MessagePanel from "@/views/Core/MessagePanel"
+  import NoticePanel from "@/views/Core/NoticePanel"
+  import PersonalPanel from "@/views/Core/PersonalPanel"
 
   export default {
     name: "headerbar",
     components: {
       Hamburger,
-      ThemePicker
+      ThemePicker,
+      MessagePanel,
+      NoticePanel,
+      PersonalPanel
     },
     data() {
       return {
@@ -91,7 +96,7 @@
           name: "zpedku",
           avatar: "http://files.57gif.com/webgif/0/8/0a/5ac2038219c213d5e61bdeb8a13f5.gif",
           role: "超级管理员",
-          registeInfo: "注册时间：2018-12-20 "
+          registerInfo: "注册时间：2019-1-11"
         },
         activeIndex: '1',
         langVisible: false

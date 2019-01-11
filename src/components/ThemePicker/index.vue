@@ -19,7 +19,7 @@
       },
       size: {
         type: String,
-        default: 'size'
+        default: 'small'
       }
     },
     data() {
