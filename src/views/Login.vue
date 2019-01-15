@@ -2,7 +2,10 @@
   <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px"
            class="demo-ruleForm login-container">
     <!--style="padding-left: 22px;"-->
-    <h2>系统登录</h2>
+    <span class="tool-bar">
+      <theme-picker style="float:right;" class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
+    </span>
+    <h2 class="title">系统登录</h2>
     <el-form-item prop="account">
       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
@@ -41,9 +44,13 @@
 <script>
   import {mapState} from "vuex"
   import Cookie from 'js-cookie'
+  import ThemePicker from '@/components/ThemePicker'
 
   export default {
     name: "Login",
+    components:{
+      ThemePicker
+    },
     data() {
       return {
         loading: false,
@@ -63,6 +70,11 @@
         }
         , checked: true
       }
+    },
+    computed:{
+      ...mapState({
+        themeColor: state=>state.app.themeColor
+      })
     },
     methods: {
       login() {
@@ -98,6 +110,9 @@
       refreshCaptcha() {
         this.loginForm.src = this.global.baseURI + "/captcha.jpg?t=" + new Date().getTime();
       },
+      onThemeChange:function(themeColor){
+        this.$store.commit('setThemeColor', themeColor)
+      },
       reset() {
         this.$refs.loginForm.resetFields();
       }
@@ -119,5 +134,13 @@
     background: #fff;
     border: 1px solid #eaeaea;
     box-shadow: 0 0 25px #cac6c6;
+    .title {
+      margin: 0px auto 40px auto;
+      text-align: center;
+      color: #505458;
+    }
+    .remember {
+      margin: 0px;
+    }
   }
 </style>
