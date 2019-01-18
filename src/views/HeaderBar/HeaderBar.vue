@@ -1,5 +1,5 @@
 <template>
-  <div class="header" :style="{'background':themeColor}">
+  <div class="header" :style="{'backgroundColor':themeColor}" :class="collapse?'position-collapse-left':'position-left'">
     <!--导航收缩-->
     <span class="hamburg">
       <el-menu class="ele-menu-demo" :background-color="themeColor" text-color="#fff"
@@ -101,6 +101,11 @@
         activeIndex: '1',
         langVisible: false
       }
+    },
+    computed:{
+      ...mapState({
+        collapse: state => state.app.collapse
+      })
     },
     methods: {
       handleSelect(key, keyPath) {
