@@ -1,7 +1,8 @@
 <template>
   <div class="menu-bar-container">
     <!--logo-->
-    <div class="logo" :style="{backgroundColor:themeColor}" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'" @click="$router.push('/')">
+    <div class="logo" :style="{backgroundColor:themeColor}" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
+         @click="$router.push('/')">
       <img v-if="collapse" src="@/assets/logo.png">
       <div>{{collapse?'':appName}}</div>
     </div>
@@ -17,6 +18,7 @@
 <script>
   import {mapState} from 'vuex'
   import MenuTree from '@/components/MenuTree'
+
   export default {
     name: "NavBar",
     components: {MenuTree},
@@ -26,14 +28,53 @@
         themeColor: state => state.app.themeColor,
         collapse: state => state.app.collapse,
         navTree: state => state.menu.navTree
-      })
+      }),
+      mainTabs:{
+        get(){
+          return this.$store.state.tab.mainTabs
+        },
+        set(val){
+          this.$store.commit("updateMainTabs",val)
+        }
+      },
+      mainTabsActiveName:{
+        get(){
+          return this.$store.state.tab.mainTabsActiveName
+        },
+        set(val){
+          this.$store.commit('updateMainTabsActiveName',val)
+        }
+      }
+    },
+    watch:{
+      $route:'handleRoute'
+    },
+    created(){
+      this.handleRoute(this.$route)
     },
     methods: {
       handleopen: () => {
+        console.log('handleopen')
       },
       handleclose: () => {
+        console.log('handleclose')
       },
       handleselect: () => {
+        console.log('handleselect')
+      },
+      //路由操作处理
+      handleRoute(route) {
+        //tab标签选中,如果不存在则先添加
+        var tab = this.mainTabs.filter(item => item.name === route.name)[0]
+        if (!tab) {
+          tab = {
+            name: route.name,
+            title: route.name,
+            icon: route.meta.icon
+          }
+          this.mainTabs = this.mainTabs.concat(tab)
+        }
+        this.mainTabsActiveName = tab.name
       }
     }
   }

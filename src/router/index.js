@@ -3,23 +3,33 @@ import Router from 'vue-router'
 import api from '@/http/api'
 import store from '@/store'
 import {getIFramePath, getIFrameUrl} from '@/utils/iframe'
+import Intro from '@/views/Intro'
 
 Vue.use(Router)
 
-let routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/Home')
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/Login')
-  }
-]
-var router = new Router({
-  routes
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      name: '首页',
+      component: () => import('@/views/Home'),
+      children:[
+        {
+          path:'',
+          name:'系统介绍',
+          component:Intro,
+          meta:{
+            icon:'fa fa-home fa-lg'
+          }
+        }
+      ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/Login')
+    }
+  ]
 })
 
 router.beforeEach((to, from, next) => {
@@ -43,7 +53,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-
 })
 
 /**
@@ -59,21 +68,22 @@ function addDynamicMenuAndRoutes(userName, to, from) {
   api.menu.findNavTree({userName: userName}).then((res) => {
     //todo 动态添加路由
     let dynamicRoutes = addDynamicRoutes(res.data)
-    console.log('菜单',res.data)
+    console.log('dynamicRoutes', dynamicRoutes)
+    router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
+    router.addRoutes(router.options.routes)
+    console.log('菜单', res.data)
     //保存加载状态
-    store.commit("menuRouteLoaded",true)
+    store.commit("menuRouteLoaded", true)
     //保存菜单树
-    store.commit('setNavTree',res.data)
-  }).then(res=>{
+    store.commit('setNavTree', res.data)
+  }).then(res => {
     //获取用户权限信息
     //todo 这里上传角色名
     // api.use.findPermissions({name:userName}).then(res=>{
-      //保存用户权限标识集合
-      //store.commit('setPerms',res.data)
+    //保存用户权限标识集合
+    //store.commit('setPerms',res.data)
     // })
   })
-
-  //todo 先开发菜单树
 
 
 }
@@ -95,11 +105,12 @@ function addDynamicRoutes(menuList = [], routes = []) {
   console.log('addDynamicRoutes');
   //顶级菜单导航是目录,没有路由
   var temp = [];
-  for (let i = 0; i < menuList; i++) {
+  //console.log('menuList',menuList)
+  for (let i = 0; i < menuList.length; i++) {
     if (menuList[i].children && menuList[i].children.length >= 1) {
-      temp.concat(menuList.children[i]) //递归存在子元素的菜单
+      temp = temp.concat(menuList[i].children) //递归存在子元素的菜单
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) { //匹配非空白字符,url存在
-      menuList[i].url = menuList.url, replace('/^\//', '') // 去掉第一个/ 因为是嵌套路由
+      menuList[i].url = menuList[i].url.replace('/^\//', '') // 去掉第一个/ 因为是嵌套路由
       //创建路由配置
       var route = {
         path: menuList[i].url,
@@ -121,10 +132,11 @@ function addDynamicRoutes(menuList = [], routes = []) {
           let array = menuList[i].url.split('/')
           let url = ''
           for (let j = 0; j < array.length; j++) {//url首字母转大小写
-            url += array[i].substring(0, 1).toUpperCase() + array[i].substring(1) + '/'
+            url += array[j].substring(0, 1).toUpperCase() + array[j].substring(1) + '/'
           }
-          url = url.substring(0,url.length-1)
-          route['component']= ()=>import(`@/views/${url}`)
+          url = url.substring(1, url.length - 1)
+          console.log('views/url',url)
+          route['component'] = () => import(`@/views/${url}`)
         } catch (e) {
           console.log(e);
         }
@@ -132,13 +144,15 @@ function addDynamicRoutes(menuList = [], routes = []) {
       routes.push(route)
     }
   }
-  if(temp.length>=1){
+  if (temp.length >= 1) {
     addDynamicRoutes(temp, routes)
-  }else{
+  } else {
     console.log('动态路由加载...');
     console.log(routes)
     console.log('动态路由加载完成');
   }
+  // console.log('routes',routes)
+  return routes
 }
 
 

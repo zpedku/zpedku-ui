@@ -4,7 +4,9 @@
     <!--tab page-->
     <div class="tab-container">
       <el-tabs class="tab" :class="$store.state.app.collapse?'position-collapse-left':'position-left'"
-               v-model="mainTabsActiveName" :closable="true" type="card">
+               v-model="mainTabsActiveName" :closable="true" type="card"
+              @tab-click="selectedTabHandle"
+      >
         <el-dropdown class="tabs-tools" :show-timeout="0" trigger="hover">
           <div style="font-size:20px;width:50px;"><i class="el-icon-arrow-down"></i></div>
           <el-dropdown-menu slot="dropdown">
@@ -22,11 +24,11 @@
     </div>
     <!-- 主内容区域 -->
     <div class="main-content">
-      <keep-alive>
-        <transition name="fade" mode="out-in">
+      <transition name="fade" mode="out-in">
+        <keep-alive>
           <router-view></router-view>
-        </transition>
-      </keep-alive>
+        </keep-alive>
+      </transition>
     </div>
   </div>
 </template>
@@ -40,9 +42,6 @@
       return {}
     },
     computed: {
-      // ...mapState({
-      //
-      // })
       mainTabs: {
         get() {
           return this.$store.state.tab.mainTabs
@@ -68,15 +67,29 @@
           this.$router.push({name: tab[0].name})
         }
       },
-      tabsCloseCurrentHandle(){},
-      tabsCloseOtherHandle(){},
-      tabsCloseAllHandle(){},
-      tabsRefreshCurrentHandle(){}
+      tabsCloseCurrentHandle() {
+      },
+      tabsCloseOtherHandle() {
+      },
+      tabsCloseAllHandle() {
+      },
+      tabsRefreshCurrentHandle() {
+      }
     }
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .main-container {
+    padding: 0 5px 5px;
+    position: absolute;
+    top: 60px;
+    left: 1px;
+    right: 1px;
+    bottom: 1px;
+    /*background-color: red;*/
+  }
+
   .position-collapse-left {
     left: 65px;
   }
