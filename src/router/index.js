@@ -24,11 +24,11 @@ const router = new Router({
         }
       ]
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Login')
-    }
+    // {
+    //   path: '/login',
+    //   name: 'login',
+    //   component: () => import('@/views/Login')
+    // }
   ]
 })
 
@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
   //登录界面登录成功之后,会把用户信息存在会中
   //存在时间会话生命周期,页面关禁即失效
   let userName = sessionStorage.getItem('user')
-  console.log(userName)
+  // console.log(userName)
   if (to.path === '/login') {
     if (userName) {
       next({path: '/'})
@@ -68,10 +68,10 @@ function addDynamicMenuAndRoutes(userName, to, from) {
   api.menu.findNavTree({userName: userName}).then((res) => {
     //todo 动态添加路由
     let dynamicRoutes = addDynamicRoutes(res.data)
-    console.log('dynamicRoutes', dynamicRoutes)
+    // console.log('dynamicRoutes', dynamicRoutes)
     router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
     router.addRoutes(router.options.routes)
-    console.log('菜单', res.data)
+    // console.log('菜单', res.data)
     //保存加载状态
     store.commit("menuRouteLoaded", true)
     //保存菜单树
@@ -102,7 +102,7 @@ function handleIFrameUrl(path) {
  * @param routes 递归创建的动态(菜单)路由
  */
 function addDynamicRoutes(menuList = [], routes = []) {
-  console.log('addDynamicRoutes');
+  // console.log('addDynamicRoutes');
   //顶级菜单导航是目录,没有路由
   var temp = [];
   //console.log('menuList',menuList)
@@ -135,7 +135,7 @@ function addDynamicRoutes(menuList = [], routes = []) {
             url += array[j].substring(0, 1).toUpperCase() + array[j].substring(1) + '/'
           }
           url = url.substring(1, url.length - 1)
-          console.log('views/url',url)
+          // console.log('views/url',url)
           route['component'] = () => import(`@/views/${url}`)
         } catch (e) {
           console.log(e);

@@ -30,7 +30,7 @@
               path = menu.url
             }
             // 通过菜单URL跳转到指定路由
-            this.$router.push("/")
+            // this.$router.push("/")
             this.$router.push(path)
           }
       }
