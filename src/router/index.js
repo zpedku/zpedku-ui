@@ -4,6 +4,7 @@ import api from '@/http/api'
 import store from '@/store'
 import {getIFramePath, getIFrameUrl} from '@/utils/iframe'
 import Intro from '@/views/Intro'
+import Home from  '@/views/Home'
 
 Vue.use(Router)
 
@@ -12,7 +13,7 @@ const router = new Router({
     {
       path: '/',
       name: '首页',
-      component: () => import('@/views/Home'),
+      component: Home,
       children:[
         {
           path:'',
@@ -24,11 +25,11 @@ const router = new Router({
         }
       ]
     },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: () => import('@/views/Login')
-    // }
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/Login')
+    }
   ]
 })
 

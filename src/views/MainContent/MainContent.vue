@@ -19,8 +19,11 @@
             <el-dropdown-item @click.native="tabsRefreshCurrentHandle">刷新当前标签</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-tab-pane v-for="item in mainTabs"
-                     :key="item.name" :label="item.title" :name="item.name">
+        <el-tab-pane
+                     v-for="item in mainTabs"
+                     :key="item.name"
+                     :label="item.title"
+                     :name="item.name">
           <span slot="label"><i :class="item.icon"></i> {{item.title}} </span>
         </el-tab-pane>
       </el-tabs>
